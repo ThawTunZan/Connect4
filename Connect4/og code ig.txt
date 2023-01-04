@@ -1,0 +1,453 @@
+const canvas = document.querySelector('canvas')
+const c = canvas.getContext('2d')
+
+canvas.width = 1024
+canvas.height = 576
+let x_pos = 0
+c.fillRect(0,0, canvas.width, canvas.height)
+let blockNUM
+const gridArray = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+  ];
+
+var j = 0
+const gravity = 0.3
+let animationId 
+//console.log(gridArray)
+class circle {
+    constructor({position, velocity, color, currIteration}) {
+        this.position = position
+        this.velocity = velocity
+        this.color = color
+        this.height = 50
+        this.currIteration = currIteration
+        this.landed = false
+        this.enter = false
+    }
+    draw() {
+        c.fillStyle = this.color
+        c.fillRect(this.position.x, this.position.y, this.height, 50)
+    }
+    update(blockNUM) {
+        this.draw();
+        let blockKey = `block${blockNUM}`
+        if (checkCollision(this.currIteration - 1, this.position.y + this.height, blockNUM) == true) {
+            this.velocity.y = 0
+            this.landed = true
+            this.position.y = getHeight(blockNUM)
+        }
+        else if (blockDROP[blockKey].Enter == true) {
+          this.position.y += this.velocity.y;
+          this.velocity.y += gravity
+        } else {
+          this.position.y = this.position.y;
+          this.velocity.y = 0
+          this.landed= true
+          if (checkWinner == 1) {
+            cancelAnimationFrame(animationId)
+          }
+        }
+      
+        if (this.position.y + this.height >= canvas.height - 95 || checkCollision(this.currIteration - 1, this.position.y + this.height,blockNUM) == true) {
+          this.velocity.y = 0;
+          this.landed = true
+          blockDROP[blockKey].dropped = true                            //the [] is needed because it is a variable
+          blockDROP[blockKey].Enter = false
+          for (let i = 6; i >=0 ; i -= 1) {
+                if (gridArray[i][(blockArray[blockNUM - 1].position.x / 50)] == 0 || gridArray[i][(blockArray[blockNUM - 1].position.x / 50)] == blockNUM) {
+                    gridArray[i][(blockArray[blockNUM - 1].position.x / 50)] = blockNUM
+                    break
+                }
+            }
+        } 
+        else {
+          this.velocity.y += gravity;
+        }
+    }
+
+}
+
+let blockArray = []
+for (let i = 0; i < 42; i += 1) {
+    let temp_i = i + 1
+    let temp_color
+    if (temp_i % 2 == 0) {
+        temp_color = 'green'
+    }
+    else {
+        temp_color = 'red'
+    }
+    mainBlock = new circle({
+        position: {
+            x: 0,
+            y: 0
+        },
+
+        velocity: {
+            x: 0,
+            y: 0
+        },
+        currIteration: i + 1,
+        color: temp_color
+       
+    })
+    //console.log(mainBlock.landed)
+    blockArray.push(mainBlock)
+    
+}
+
+function checkCollision(k, currBottom, blockNUM) {
+    let j = 0
+    for (let i = 6; i >=0 ; i -= 1) {
+        if (gridArray[i][(blockArray[blockNUM - 1].position.x / 50)] != 0) {
+            j += 1
+        }
+        if (gridArray[i][(blockArray[blockNUM - 1].position.x / 50)] == blockNUM) {
+            return true
+        }
+    }
+    if (currBottom >= canvas.height-95-(50*j)) {
+            return true
+        }
+    else {
+        return false
+    }
+}
+
+function getHeight(blockNUM) {
+    let j = 0
+    for (let i = 6; i >=0 ; i -= 1) {
+        if (gridArray[i][(blockArray[blockNUM - 1].position.x / 50)] == blockNUM || gridArray[i][(blockArray[blockNUM - 1].position.x / 50)] == 0) {
+            return (canvas.height - 95 - ((6-i)*50))
+        }
+    }
+    return 0
+}
+
+const blockDROP = {
+    block0: {
+        dropped: true
+    },
+    block1: {
+        dropped: false,
+        Enter:false
+    },
+    block2: {
+        dropped: false,
+        Enter:false
+    },
+    block3: {
+        dropped: false,
+        Enter:false
+    },
+    block4: {
+        dropped: false,
+        Enter:false
+    },
+    block5: {
+        dropped: false,
+        Enter:false
+    },
+    block6: {
+        dropped: false,
+        Enter:false
+    },
+    block7: {
+        dropped: false,
+        Enter:false
+    },
+    block8: {
+        dropped: false,
+        Enter:false
+    },
+    block9: {
+        dropped: false,
+        Enter:false
+    },
+    block10: {
+        dropped: false,
+        Enter:false
+    },
+    block11: {
+        dropped: false,
+        Enter:false
+    },
+    block12: {
+        dropped: false,
+        Enter:false
+    },
+    block13: {
+        dropped: false,
+        Enter:false
+    },
+    block14: {
+        dropped: false,
+        Enter:false
+    },
+    block15: {
+        dropped: false,
+        Enter:false
+    },
+    block16: {
+        dropped: false,
+        Enter:false
+    },
+    block17: {
+        dropped: false,
+        Enter:false
+    },
+    block18: {
+        dropped: false,
+        Enter:false
+    },
+    block19: {
+        dropped: false,
+        Enter:false
+    },
+    block20: {
+        dropped: false,
+        Enter:false
+    },
+    block21: {
+        dropped: false,
+        Enter:false
+    },
+    block22: {
+        dropped: false,
+        Enter:false
+    },
+    block23: {
+        dropped: false,
+        Enter:false
+    },
+    block24: {
+        dropped: false,
+        Enter:false
+    },
+    block25: {
+        dropped: false,
+        Enter:false
+    },
+    block26: {
+        dropped: false,
+        Enter:false
+    },
+    block27: {
+        dropped: false,
+        Enter:false
+    },
+    block28: {
+        dropped: false,
+        Enter:false
+    },
+    block29: {
+        dropped: false,
+        Enter:false
+    },
+    block30: {
+        dropped: false,
+        Enter:false
+    },
+    block31: {
+        dropped: false,
+        Enter:false
+    },
+    block32: {
+        dropped: false,
+        Enter:false
+    },
+    block33: {
+        dropped: false,
+        Enter:false
+    },
+    block34: {
+        dropped: false,
+        Enter:false
+    },
+    block35: {
+        dropped: false,
+        Enter:false
+    },
+    block36: {
+        dropped: false,
+        Enter:false
+    },
+    block37: {
+        dropped: false,
+        Enter:false
+    },
+    block38: {
+        dropped: false,
+        Enter:false
+    },
+    block39: {
+        dropped: false,
+        Enter:false
+    },
+    block40: {
+        dropped: false,
+        Enter:false
+    },
+    block41: {
+        dropped: false,
+        Enter:false
+    },
+    block42: {
+        dropped: false,
+        Enter:false
+    }
+}
+
+//let animationId 
+
+function animate() {
+    c.fillStyle = 'black'
+    c.fillRect(0,0, canvas.width, canvas.height)
+    blockArray[0].update(1)
+    for (let i = 1; i < 42; i += 1) {
+        if (blockArray[i - 1].dropped == true) {
+            console.log("test")
+            blockArray[i].update(i + 1)
+        }
+    }
+
+    //const winner = checkWinner()
+    //if (winner != 0) {
+        
+    //    cancelAnimationFrame(animationId)
+    //}
+    //else {
+    window.requestAnimationFrame(animate)
+    //}
+    
+}
+
+animate()
+
+let z=1
+window.addEventListener('keypress',(event) => {
+    let blockNUMforEVENT
+    console.log(event.key)
+    switch (event.key) {
+        case 'Enter':
+            blockArray[z-1].enter = true
+            blockNUMforEVENT = `block${z}`
+            blockDROP[blockNUMforEVENT].Enter = true
+            x_pos= 0
+            z += 1
+            break
+        case 'a':
+            if (blockArray[z-1].position.x > 0) {
+                blockArray[z-1].position.x -= 50
+                x_pos -= 1
+                break
+            }
+            else {
+                blockArray[z-1].position.x=0
+            }
+        case 'd':
+            if (blockArray[z-1].position.x < 250) {
+                blockArray[z-1].position.x += 50
+                x_pos += 1
+                break
+            }
+        case 'p':
+            console.log(gridArray)
+    }
+})
+
+let count = 0
+
+function checkWinner() {
+    //check horizontal
+    for (let i = 0; i < 7; i += 1) {
+        for(let j = 0; j < 3; j += 1) {
+            if ((gridArray[i][j] != 0 && gridArray[i][j + 1] != 0 && gridArray[i][j + 2] != 0 && gridArray[i][j + 3] != 0) &&
+            (gridArray[i][j] % 2 == 0 && gridArray[i][j + 1] % 2 == 0 && gridArray[i][j + 2] % 2 == 0 && gridArray[i][j + 3] % 2 == 0)) {
+                alert('Player 2 has won!')
+                return  1
+            }
+        }  
+    }
+    for (let i = 0; i < 7; i += 1) {
+        for(let j = 0; j < 3; j += 1) {
+            if ((gridArray[i][j] != 0 && gridArray[i][j + 1] != 0 && gridArray[i][j + 2] != 0 && gridArray[i][j + 3] != 0) &&
+            (gridArray[i][j] % 2 == 1 && gridArray[i][j + 1] % 2 == 1 && gridArray[i][j + 2] % 2 == 1 && gridArray[i][j + 3] % 2 == 1)) {
+                alert('Player 1 has won!')
+                return  1
+            }
+        }  
+    }
+
+
+    //check down
+    for (let i = 0; i < 4; i += 1) {
+        for(let j = 0; j < 6; j += 1) {
+            if ((gridArray[i][j] != 0 && gridArray[i + 1][j] != 0 && gridArray[i + 2][j] != 0 && gridArray[i + 3][j] != 0) &&
+            (gridArray[i][j] % 2 == 0 && gridArray[i + 1][j] % 2 == 0 && gridArray[i + 2][j] % 2 == 0 && gridArray[i + 3][j] % 2 == 0)) {
+                alert('Player 2 has won!')
+                return  1
+            }
+        }
+    }
+    for (let i = 0; i < 4; i += 1) {
+        for(let j = 0; j < 6; j += 1) {
+            if ((gridArray[i][j] != 0 && gridArray[i + 1][j] != 0 && gridArray[i + 2][j] != 0 && gridArray[i + 3][j] != 0) &&
+            (gridArray[i][j] % 2 == 1 && gridArray[i + 1][j] % 2 == 1 && gridArray[i + 2][j] % 2 == 1 && gridArray[i + 3][j] % 2 == 1)) {
+                alert('Player 1 has won!')
+                return  1
+            }
+        }
+    }
+
+
+    //check diagonal down for player 2
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 3; j++) {
+            if ((gridArray[i][j] != 0 && gridArray[i + 1][j + 1] != 0 && gridArray[i + 2][j + 2] != 0 && gridArray[i + 3][j + 3] != 0) &&
+            (gridArray[i][j] % 2 == 0 && gridArray[i + 1][j + 1] % 2 == 0 && gridArray[i + 2][j + 2] % 2 == 0 && gridArray[i + 3][j + 3] % 2 == 0)) {
+                alert('Player 2 has won!')
+                return  1;
+            }
+        }
+    }
+    //check diagonal down for player 1
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 3; j++) {
+            if ((gridArray[i][j] != 0 && gridArray[i + 1][j + 1] != 0 && gridArray[i + 2][j + 2] != 0 && gridArray[i + 3][j + 3] != 0) &&
+            (gridArray[i][j] % 2 == 1 && gridArray[i + 1][j + 1] % 2 == 1 && gridArray[i + 2][j + 2] % 2 == 1 && gridArray[i + 3][j + 3] % 2 == 1)) {
+                alert('Player 1 has won!')
+                return  1;
+            }
+        }
+    }
+
+
+    //check diagonal up for player 2
+    for (let i = 6; i > 2; i -= 1) {
+        for (let j = 0; j < 3; j++) {
+            if ((gridArray[i][j] != 0 && gridArray[i - 1][j + 1] != 0 && gridArray[i - 2][j + 2] != 0 && gridArray[i - 3][j + 3] != 0) &&
+            (gridArray[i][j] % 2 == 0 && gridArray[i - 1][j + 1] % 2 == 0 && gridArray[i - 2][j + 2] % 2 == 0 && gridArray[i - 3][j + 3] % 2 == 0)) {
+                alert('Player 2 has won!')
+                return  1;
+            }
+        }
+    }
+    //check diagonal up for player 1
+    for (let i = 6; i > 2; i -= 1) {
+        for (let j = 0; j < 3; j++) {
+            if ((gridArray[i][j] != 0 && gridArray[i - 1][j + 1] != 0 && gridArray[i - 2][j + 2] != 0 && gridArray[i - 3][j + 3] != 0) && 
+            (gridArray[i][j] % 2 == 1 && gridArray[i - 1][j + 1] % 2 == 1 && gridArray[i - 2][j + 2] % 2 == 1 && gridArray[i - 3][j + 3] % 2 == 1)) {
+                alert('Player 1 has won!')
+                return  1;
+            }
+        }
+    }
+    return 0
+}

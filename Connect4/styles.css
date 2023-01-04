@@ -1,0 +1,30 @@
+
+canvas {
+    text-align: center;
+    position: relative;
+    z-index: -1;
+}
+
+#header1 {
+    transform: translateX(300px);
+}
+
+img {
+    
+    position: absolute;
+    z-index: 1;
+    bottom: 335;
+    left: 7.5;
+}
+
+#foregroundText {
+    position: absolute;
+    z-index: 1000;
+    top:250px;
+    left:500px;
+    width: 50px;
+    height: 100px;
+    color: white;
+    
+}
+
